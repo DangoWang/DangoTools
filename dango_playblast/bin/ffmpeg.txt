@@ -1,0 +1,2 @@
+来这里下载ffmpeg放到这个文件夹中：
+http://ffmpeg.org/download.html
