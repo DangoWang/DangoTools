@@ -1,0 +1,24 @@
+# written by dango wang
+DefaultProj: "dsf"
+DefaultDep: "Layout"
+dsf:
+    Layout:
+        - Pos: [1,1]
+          Label: 'test_label'
+        - Pos: [1,2]
+          Label: 'test_Label'
+    Animation:
+        - Pos: [1,3]
+          Label: 'test_label'
+        - Pos: [1,4]
+          Label: 'test_label'
+    VFX:
+        - Pos: [1,5]
+          Label: 'test_label'
+        - Pos: [1,6]
+          Label: 'test'
+    Lighting:
+        - Pos: [1,7]
+          Label: 'test_label'
+        - Pos: [1,8]
+          Label: 'test'
