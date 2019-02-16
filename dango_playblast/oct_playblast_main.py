@@ -258,18 +258,8 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
             self.write_config()
             self.write_hud_config()
             logging.info("Successfully saved configuration!")
-            try:
-                cmds.deleteUI("layout_temp")
-                cmds.deleteUI("playBlast_panel", panel=1)
-            except RuntimeError:
-                pass
             event.accept()
         else:
-            try:
-                cmds.deleteUI("layout_temp")
-                cmds.deleteUI("playBlast_panel", panel=1)
-            except RuntimeError:
-                pass
             event.accept()
 
 
