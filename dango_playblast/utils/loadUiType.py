@@ -3,12 +3,17 @@
 # author: Dango Wang
 # time : 2019/1/7
 
-from PySide2 import QtWidgets
-from shiboken2 import wrapInstance
-import pyside2uic as uic
 import xml.etree.ElementTree as xml
 from cStringIO import StringIO
 import maya.OpenMayaUI as mui
+try:
+    from PySide2 import QtWidgets
+    from shiboken2 import wrapInstance
+    import pyside2uic as uic
+except ImportError:
+    import PySide.QtGui as QtWidgets
+    from shiboken import wrapInstance
+    import pysideuic as uic
 
 
 def loadUiType(uiFile):

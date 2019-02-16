@@ -9,8 +9,12 @@ __doc__ = "this script is to create a window with no functions for oct_playblast
 
 import os
 from ..utils import loadUiType
-from PySide2.QtWidgets import QWidget
-from shiboken2 import wrapInstance
+try:
+    from PySide2.QtWidgets import QWidget
+    from shiboken2 import wrapInstance
+except ImportError:
+    from PySide.QtGui import QWidget
+    from shiboken import wrapInstance
 import maya.cmds as cmds
 import maya.OpenMayaUI as omui
 
