@@ -50,6 +50,9 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         # private param
         self._config_data = self.read_config()
         self._hud_config_data = self.read_hud_config()
+        # all_hud_info = list()
+        # self.drawed_hud_info = list()
+        # self.stop_drawing = 0
         # method
         self.add_hud_pushButton.clicked.connect(self.on_add_hud_pushButton_clicked)
         self.reduce_hud_pushButton.clicked.connect(self.on_reduce_hud_pushButton_clicked)
@@ -71,6 +74,17 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         self.display_mask_checkBox.stateChanged.connect(self.set_board_color)
         self.input_hud_label_comboBox.currentIndexChanged.connect(self.add_hud_info)
         self.playBlast_doit_pushButton.clicked.connect(self.on_playBlast_doit_pushButton_clicked)
+        # QAction
+        self.save_action.triggered.connect(self.save_settings)
+        self.import_settings_action.triggered.connect(self.import_settings)
+        self.export_settings_action.triggered.connect(self.export_settings)
+        self.reset_action.triggered.connect(self.reset_settings)
+
+        self.import_hud_action.triggered.connect(self.import_hud_settings)
+        self.export_hud_action.triggered.connect(self.export_hud_settings)
+        self.reset_hud_action.triggered.connect(self.reset_hud_settings)
+
+        self.quit_action.triggered.connect(self.close)
 
     #
     def on_playBlast_doit_pushButton_clicked(self):
@@ -88,7 +102,10 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         # print percent
         mov_name = self.video_name_lineEdit.text()
         mov_path = self.file_path_lineEdit.text()
-        jpg_path = mov_path + "/oct_playblast_cache"
+        if not (mov_name and mov_path):
+            logging.error("Plz input all info needed!!")
+            return
+        jpg_path = mov_path + "/oct_playblast_cache" + mov_name
         start_frame = self.start_frame_spinBox.value()
         end_frame = self.end_frame_spinBox.value()
         time_duation = (end_frame - start_frame + 1) / float(fps)
@@ -122,28 +139,40 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
                                            quality=quality, off_screen=off_screen, framePadding=4)
             # print picture
             seq = str(frame).zfill(4)
-            self.draw_hud_text(picture.replace("####", "%s" % seq))
+            # all_hud_info.append(self.hud_text(picture.replace("####", "%s" % seq)))
+            if self.draw_hud_checkBox.isChecked():
+                self.draw_hud_text(self.hud_text(picture.replace("####", "%s" % seq)))
             frame += 1
+        # if all_hud_info:
+        #     print "================================="
+        #     print "Drawing HUD...please wait..."
+        #     map(self.draw_hud_text, all_hud_info)
         start_number = str(start_frame).zfill(4)
         time.sleep(0.5)
+        # if self.stop_drawing and not all_hud_info:
+        #     backstage_drawing.stop()
+        print "Drawing HUD down.\nCompressing Video..."
+        pic_format = '.png'
+        if self.draw_hud_checkBox.isChecked():
+            pic_format = '.jpg'
         self.compress_video(fps=str(fps), time_duation=str(time_duation), start_number=start_number,
                             ffmpeg_path="\"" + file_path + "/bin/ffmpeg.exe" + "\"",
-                            input_path="\"" + jpg_path + "/%s" % (mov_name + ".%04d.jpg") + "\"",
+                            input_path="\"" + jpg_path + "/%s" % (mov_name + ".%04d"+pic_format) + "\"",
                             output_path="\"" + mov_path + "/%s" % (mov_name + ".mov") + "\"",
-                            sound="\"" + sound_path + "\"")
+                            sound="\"" + sound_path + "\"", jpg_path=jpg_path)
 
-    def compress_video(self, fps, time_duation, start_number, ffmpeg_path, input_path, output_path, sound=None):
+    def compress_video(self, fps, time_duation, start_number, ffmpeg_path, input_path, output_path, jpg_path, sound=None):
         if sound == "\"no_sound\"":
             compress_word = [ffmpeg_path, " -y -framerate ", fps, u" -start_number ", start_number, " -i ", input_path,
                              " -vcodec h264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p ", output_path]
         # print compress_word
         else:
             compress_word = [ffmpeg_path, " -y -framerate ", fps, u" -start_number ", start_number, " -i ", input_path,
-                             " -i ", sound, " -ss 0:0:0 ", " -t ", time_duation, " -vcodec h264 ", output_path]
+                             " -i ", sound, " -ss 0:0:0 ", " -t ", time_duation,
+                             " -vcodec h264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p ", output_path]
         compress_cmd = "".join(compress_word)
         # print compress_cmd
         subprocess.call(compress_cmd, shell=True)
-        jpg_path = self.file_path_lineEdit.text() + "/oct_playblast_cache"
         subprocess.Popen("explorer \"%s\"" % os.path.abspath(output_path.strip("\"")))
         if os.path.isdir(jpg_path):
             timer = maya_multi_processing.Timer(5, lambda: shutil.rmtree(jpg_path), repeat=False)
@@ -151,7 +180,22 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
 
     # print output_path.strip("\"")
 
-    def draw_hud_text(self, input_path):
+    # def scan_files(self, path, postfix):
+    #     return playBlastCMD.scan_file(path, postfix)
+
+    # def scan_drawing(self):
+    #     fresh_hud_info = [hud for hud in all_hud_info if hud not in self.drawed_hud_info]
+    #     if fresh_hud_info:
+    #         print 1
+    #         for each_info in fresh_hud_info:
+    #             self.draw_hud_text(each_info)
+    #             all_hud_info.pop(each_info)
+    #             self.drawed_hud_info.append(each_info)
+    #     else:
+    #         print 0
+    #     return
+
+    def hud_text(self, input_path):
         """
         draw text using ffmpeg
         :return:
@@ -171,12 +215,37 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         board_color = playBlastCMD.convert_color(playBlastCMD.get_rgb(self.board_color_pushButton.styleSheet()))
         board_opacity = self.board_opacity_doubleSpinBox.value()
         # print all_files
-        playBlastCMD.draw_all_text_cmd(input_pic=input_path, output_pic=input_path.replace(".png", ".jpg"),
-                                       text_content=text_info,
-                                       label_color=label_color, value_color=value_color,
-                                       font=font, font_size=font_size, unit_opacity=unit_opacity,
-                                       board_display=board_display, board_color=board_color,
-                                       board_opacity=board_opacity)
+        return {"input_pic": input_path,
+                "output_pic": input_path.replace(".png", ".jpg"),
+                "text_content": text_info,
+                "label_color": label_color,
+                "value_color": value_color,
+                "font": font,
+                "font_size": font_size,
+                "unit_opacity": unit_opacity,
+                "board_display": board_display,
+                "board_color": board_color,
+                "board_opacity": board_opacity}
+        # playBlastCMD.draw_all_text_cmd(input_pic=input_path, output_pic=input_path.replace(".png", ".jpg"),
+        #                                text_content=text_info,
+        #                                label_color=label_color, value_color=value_color,
+        #                                font=font, font_size=font_size, unit_opacity=unit_opacity,
+        #                                board_display=board_display, board_color=board_color,
+        #                                board_opacity=board_opacity)
+
+    def draw_hud_text(self, hud_text):
+        return playBlastCMD.draw_all_text_cmd(input_pic=hud_text["input_pic"],
+                                               output_pic=hud_text["output_pic"],
+                                               text_content=hud_text["text_content"],
+                                               label_color=hud_text["label_color"],
+                                               value_color=hud_text["value_color"],
+                                               font=hud_text["font"],
+                                               font_size=hud_text["font_size"],
+                                               unit_opacity=hud_text["unit_opacity"],
+                                               board_display=hud_text["board_display"],
+                                               board_color=hud_text["board_color"],
+                                               board_opacity=hud_text["board_opacity"]
+                                               )
 
     """
     PlayBlast settings
@@ -213,7 +282,7 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
             logging.error("Please select at least one camera node!(Including shape node and transform node)")
         if cam_transform:
             self.cam_name_lineEdit.setText(cam_transform)
-        # cmds.modelEditor("playBlast_panel", e=True, camera=cam_transform)
+            cmds.modelEditor("playBlast_panel", e=True, camera=cam_transform)
         else:
             logging.error("No camera selected!")
         return True
@@ -227,14 +296,20 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         except (AttributeError, NameError, TypeError, RuntimeError):
             return False
 
+    def select_path_dialog(self, dialogStyle, fileMode, dir):
+        try:
+            selected_path = str(cmds.fileDialog2(dialogStyle=dialogStyle, fileMode=fileMode, dir=dir)).split('\'')[1]
+            return selected_path
+        except IndexError:
+            logging.error("Please select a directory!")
+            return ""
+
     def on_select_path_pushButton_clicked(self):
         # select file path
         current_path = self.file_path_lineEdit.text()
-        try:
-            selected_path = str(cmds.fileDialog2(dialogStyle=1, fileMode=3, dir=current_path)).split('\'')[1]
-        except IndexError:
-            logging.error("Please select a directory!")
+        selected_path = self.select_path_dialog(1, 3, current_path)
         self.file_path_lineEdit.setText(selected_path)
+        return True
 
     def proj_dep_comboBox_value_changed(self):
         """
@@ -255,12 +330,59 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         :return:
         """
         if self.save_checkBox.isChecked():
-            self.write_config()
-            self.write_hud_config()
-            logging.info("Successfully saved configuration!")
+            self.save_settings()
             event.accept()
         else:
             event.accept()
+
+    def save_settings(self):
+        self.write_config()
+        self.write_hud_config()
+        logging.info("Successfully saved configuration!")
+
+    def import_settings(self):
+        import_path = self.select_path_dialog(1, 1, default_config)
+        if not import_path:
+            return
+        self.read_config(import_path)
+        default_proj = self.proj_comboBox.currentText()
+        default_dep = self.dep_comboBox.currentText()
+        self.set_settings(default_proj, default_dep)
+        return True
+
+    def import_hud_settings(self):
+        import_path = self.select_path_dialog(1, 1, default_config)
+        if not import_path:
+            return
+        self.read_hud_config(import_path)
+        self.set_hud_settings()
+        return True
+
+    def export_settings(self):
+        export_path = self.select_path_dialog(1, 1, default_config)
+        if not export_path:
+            return
+        self.write_config(export_path)
+        return True
+
+    def export_hud_settings(self):
+        export_path = self.select_path_dialog(1, 1, default_config)
+        if not export_path:
+            return
+        self.write_hud_config(export_path)
+        return True
+
+    def reset_settings(self):
+        self.read_config(default_config)
+        default_proj = self.proj_comboBox.currentText()
+        default_dep = self.dep_comboBox.currentText()
+        self.set_settings(default_proj, default_dep)
+        return True
+
+    def reset_hud_settings(self):
+        self.read_hud_config(default_hud_config)
+        self.set_hud_settings()
+        return True
 
 
     def on_add_hud_pushButton_clicked(self):
@@ -586,7 +708,7 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
                 str(listMayaInfo.get_focal_length(camera_name=self.cam_name_lineEdit.text())))
         elif label == "<< Date":
             self.hud_label_add_lineEdit.setText("Date:")
-            self.hud_value_add_lineEdit.setText(str(listMayaInfo.get_current_date()))
+            self.hud_value_add_lineEdit.setText(str(listMayaInfo.get_current_date()).decode('utf-8'))
         elif label == "<< SceneName":
             self.hud_label_add_lineEdit.setText("SceneName:")
             self.hud_value_add_lineEdit.setText(listMayaInfo.get_current_file_name())
@@ -599,7 +721,9 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         elif label == "<< TimeCode":
             self.hud_label_add_lineEdit.setText("TimeCode:")
             # print listMayaInfo.get_time_code(current_frame=cmds.currentTime(q=True))
-            self.hud_value_add_lineEdit.setText(listMayaInfo.get_time_code(current_frame=cmds.currentTime(q=True)))
+            offset = listMayaInfo.get_timeslider_time()[1]-1
+            self.hud_value_add_lineEdit.setText(listMayaInfo.get_time_code(current_frame=cmds.currentTime(q=True),
+                                                                           offset=offset))
         else:
             pass
 
@@ -621,8 +745,8 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         self.fps_spinBox.setValue(listMayaInfo.get_current_fps())
         self.set_hud_settings()
         #  这里是qt的一个坑，必须这么做，否则信息不能正确被拍出
-        timer2 = maya_multi_processing.Timer(0.001, self.on_settings_tabWidget_clicked, repeat=False)
-        timer2.start()
+        self.on_settings_tabWidget_clicked()
+        self.on_settings_tabWidget_clicked()
         return True
 
 
@@ -635,6 +759,8 @@ def main():
     # oct_playblast_tool.write_hud_config()
     timer = maya_multi_processing.Timer(0.001, oct_playblast_tool.initialize_settings, repeat=False)
     timer.start()
+
+
 # oct_playblast_tool.on_settings_tabWidget_clicked()
 
 

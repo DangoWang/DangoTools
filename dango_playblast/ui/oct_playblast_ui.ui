@@ -57,6 +57,9 @@
       </item>
       <item>
        <widget class="QCheckBox" name="save_checkBox">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="maximumSize">
          <size>
           <width>16777215</width>
@@ -678,7 +681,7 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>999</number>
+             <number>9999</number>
             </property>
             <property name="value">
              <number>999</number>
@@ -809,6 +812,25 @@
           </item>
          </layout>
         </item>
+        <item row="11" column="0">
+         <widget class="QCheckBox" name="draw_hud_checkBox">
+          <property name="maximumSize">
+           <size>
+            <width>90</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Draw HUD</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+          <property name="tristate">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="hud_tab">
@@ -933,7 +955,7 @@
           <height>22</height>
          </rect>
         </property>
-        <property name="currentText" stdset="0">
+        <property name="currentText">
          <string>1</string>
         </property>
         <item>
@@ -1698,7 +1720,7 @@
          <string notr="true"/>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="playblast_page">
          <layout class="QGridLayout" name="playblast_gridLayout"/>
@@ -2035,9 +2057,14 @@
      <string>Settings</string>
     </property>
     <addaction name="save_action"/>
-    <addaction name="actionImport_Settings"/>
-    <addaction name="actionExport_Settings"/>
+    <addaction name="separator"/>
+    <addaction name="import_settings_action"/>
+    <addaction name="export_settings_action"/>
     <addaction name="reset_action"/>
+    <addaction name="separator"/>
+    <addaction name="import_hud_action"/>
+    <addaction name="export_hud_action"/>
+    <addaction name="reset_hud_action"/>
     <addaction name="separator"/>
     <addaction name="quit_action"/>
    </widget>
@@ -2065,14 +2092,34 @@
     <string>Quit</string>
    </property>
   </action>
-  <action name="actionExport_Settings">
+  <action name="export_settings_action">
    <property name="text">
     <string>Export Settings</string>
    </property>
   </action>
-  <action name="actionImport_Settings">
+  <action name="import_settings_action">
    <property name="text">
     <string>Import Settings</string>
+   </property>
+  </action>
+  <action name="save_hud_action">
+   <property name="text">
+    <string>Save HUD</string>
+   </property>
+  </action>
+  <action name="import_hud_action">
+   <property name="text">
+    <string>Import HUD</string>
+   </property>
+  </action>
+  <action name="export_hud_action">
+   <property name="text">
+    <string>Export HUD</string>
+   </property>
+  </action>
+  <action name="reset_hud_action">
+   <property name="text">
+    <string>ResetHUD</string>
    </property>
   </action>
  </widget>

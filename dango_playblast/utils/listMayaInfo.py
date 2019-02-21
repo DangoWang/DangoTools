@@ -29,15 +29,19 @@ logging.basicConfig(filename=os.path.join(os.environ["TMP"], 'scene_checking.txt
 
 def get_camera(with_panel=None):
     all_cams = [cam for cam in mc.listCameras(p=1) if not mc.referenceQuery(cam, isNodeReferenced=True)]
+    extra_cams = ['persp', 'left', 'right', 'top', 'side', 'bottom']
     if with_panel:
         try:
             current_cam = pm.PyNode(pm.modelPanel(pm.getPanel(wf=True), q=True, cam=True))
             return current_cam
         except RuntimeError:
             pass
-    all_cam_transform = [str(cam) for cam in all_cams]
+    all_cam_transform = [str(cam) for cam in all_cams if str(cam) not in extra_cams]
     # print all_cam_transform
-    return all_cam_transform
+    if all_cam_transform:
+        return all_cam_transform
+    else:
+        return ["persp"]
 
 
 def get_current_file_name(full_path=False, dir_path=False):
@@ -116,16 +120,23 @@ def get_proj_size():
         return '000'
 
 
-def get_time_code(current_frame):
-    data = divmod(current_frame, 24)
+def get_time_code(current_frame, offset=0):
+    current_frame2 = current_frame - offset
+    data = divmod(current_frame2, 24)
     return str(int(data[0])) + "s" + str(int(data[1])) + "f"
 
 
 def get_current_date():
-    local_time = time.localtime()
-    day_for_mat = '%Y/%m/%d'
-    day_value = time.strftime(day_for_mat, local_time)
-    return day_value
+    weekDayDict = {1: u'Mon', 2: u'Tue', 3: u'Wed', 4: u'Thu', 5: u'Fri', 6: u'Sat', 7: u'Sun'}
+    localTime = time.localtime()
+    dayForMat = '%Y/%m/%d'
+    dayValue = time.strftime(dayForMat, localTime)
+    weekForMat = '%w'
+    weekValue = str(time.strftime(weekForMat, localTime))
+    timeForMat = '%H:%M'
+    timeValue = time.strftime(timeForMat, localTime)
+    timeString = dayValue + " " + weekDayDict[int(weekValue)] + " " + timeValue.replace(":", "`")
+    return timeString
 
 
 def get_all_wins():

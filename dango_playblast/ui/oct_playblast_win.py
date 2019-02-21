@@ -34,19 +34,18 @@ class OctPlayBlastWin(base_class, form_class):
         :param camera_name: input camera attached to the panel
         :return: model_editor_widget for adding hud info
         """
-        try:
-            cmds.deleteUI("layout_temp")
-            cmds.deleteUI("playBlast_panel", panel=1)
-        except RuntimeError:
-            pass
-        layout_temp = cmds.paneLayout("layout_temp")
-        playBlast_panel_temp = cmds.modelPanel("playBlast_panel",
-                                          camera = camera_name,
-                                          parent = layout_temp)
+        layout_temp = "layout_temp"
+        if not cmds.control("layout_temp", q=1, ex=1):
+            layout_temp = cmds.paneLayout("layout_temp")
+        if not cmds.modelPanel("playBlast_panel", q=1, ex=1):
+            cmds.modelPanel("playBlast_panel",parent=layout_temp)
         camera_panel = omui.MQtUtil.findControl(layout_temp)
+        # print camera_panel
         camera_widget = wrapInstance(long(camera_panel), QWidget)
+        # print camera_widget
         self.playblast_gridLayout.addWidget(camera_widget)
-        cmds.modelEditor("playBlast_panel", e=True, hud=False)
+        cmds.modelEditor("playBlast_panel", e=True, allObjects=False, polymeshes=True,
+                         hud=False, displayAppearance="smoothShaded", displayTextures=False, camera=camera_name)
         return True
         # self.verticalLayout.addWidget(camera_widget)
         # self.playBlast_widget.setMinimumSize(600, 450)

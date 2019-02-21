@@ -5,9 +5,10 @@
 
 import maya.cmds as cmds
 import os
+import logging
 import locale
 import subprocess
-from utils import listMayaInfo
+from utils import listMayaInfo, maya_multi_processing
 from ui import gridLayoutMethods
 import time
 
@@ -62,10 +63,14 @@ def draw_all_text_cmd(input_pic, output_pic, text_content=None, label_color=None
         color = value_color if each[1] else label_color
         pos = each[2]
         # print pos
-        drawed_text = \
-            'drawtext=fontfile={}.ttf:text=\"{}\":x={}:y={}:fontsize={}:fontcolor={}@{}:box={}:boxcolor={}@{}'\
-                .format(font, text, pos[0], pos[1], font_size, color, unit_opacity, board_display,
-                        board_color, board_opacity) + "," + drawed_text
+        try:
+            drawed_text = \
+                'drawtext=fontfile={}.ttf:text=\"{}\":x={}:y={}:fontsize={}:fontcolor={}@{}:box={}:boxcolor={}@{}'\
+                    .format(font, text, pos[0], pos[1], font_size, color, unit_opacity, board_display,
+                            board_color, board_opacity) + "," + drawed_text
+        except UnicodeEncodeError:
+            # logging.error(u'Found Chinese Characters in HUD Info!!!')
+            raise RuntimeError(u'Found Chinese Characters in HUD Info!!!')
     new_draw_text = drawed_text.rstrip(',')
     # print new_draw_text
     draw_text(new_draw_text, input_pic, output_pic)
@@ -117,7 +122,8 @@ def get_unit_text(grid_layout, pos, camera_name):
             return str(listMayaInfo.get_proj_size())
         elif label == "TimeCode:":
             # print listMayaInfo.get_time_code(current_frame=cmds.currentTime(q=True))
-            return listMayaInfo.get_time_code(current_frame=cmds.currentTime(q=True))
+            offset = listMayaInfo.get_timeslider_time()[1] - 1
+            return listMayaInfo.get_time_code(current_frame=cmds.currentTime(q=True), offset=offset)
         else:
             return grid_layout.itemAtPosition(pos[0], pos[1]).widget().text()
 
