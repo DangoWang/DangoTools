@@ -4,7 +4,7 @@ dsf:
   Animation:
   - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1}
   - {ControlName: size_X_spinBox, ReadMethod: value, SetMethod: setValue, Value: 2048}
-  - {ControlName: margin_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 0.0}
+  - {ControlName: margin_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 0.8}
   - {ControlName: size_Y_spinBox, ReadMethod: value, SetMethod: setValue, Value: 858}
   - {ControlName: scale_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 0.5}
   - {ControlName: quality_spinBox, ReadMethod: value, SetMethod: setValue, Value: 100}
@@ -33,7 +33,9 @@ dsf:
     Value: '''background-color: rgb(113, 113, 113)'''}
   - {ControlName: board_opacity_doubleSpinBox, ReadMethod: value, SetMethod: setValue,
     Value: 1.0}
+  - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1.0}
   Layout:
+  - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1.0}
   - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1}
   - {ControlName: size_X_spinBox, ReadMethod: value, SetMethod: setValue, Value: 2048}
   - {ControlName: margin_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 0.0}
@@ -66,6 +68,7 @@ dsf:
   - {ControlName: board_opacity_doubleSpinBox, ReadMethod: value, SetMethod: setValue,
     Value: 1.0}
   Lighting:
+  - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1.0}
   - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1}
   - {ControlName: size_X_spinBox, ReadMethod: value, SetMethod: setValue, Value: 2048}
   - {ControlName: size_Y_spinBox, ReadMethod: value, SetMethod: setValue, Value: 858}
@@ -98,6 +101,7 @@ dsf:
   - {ControlName: board_opacity_doubleSpinBox, ReadMethod: value, SetMethod: setValue,
     Value: 1.0}
   VFX:
+  - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1.0}
   - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1}
   - {ControlName: size_X_spinBox, ReadMethod: value, SetMethod: setValue, Value: 2048}
   - {ControlName: size_Y_spinBox, ReadMethod: value, SetMethod: setValue, Value: 858}
