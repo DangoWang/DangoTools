@@ -161,6 +161,7 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
                             output_path="\"" + mov_path + "/%s" % (mov_name + ".mov") + "\"",
                             sound="\"" + sound_path + "\"", jpg_path=jpg_path)
 
+        
     def compress_video(self, fps, time_duation, start_number, ffmpeg_path, input_path, output_path, jpg_path, sound=None):
         if sound == "\"no_sound\"":
             compress_word = [ffmpeg_path, " -y -framerate ", fps, u" -start_number ", start_number, " -i ", input_path,
@@ -204,7 +205,7 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         scale = self.scale_doubleSpinBox.value()
         camera_name = self.cam_name_lineEdit.text()
         text_info = playBlastCMD.get_text_info(self.hud_gridLayout, size, scale, camera_name,
-                                               self.margin_doubleSpinBox.value())
+                                               self.margin_doubleSpinBox.value(), self.gap_doubleSpinBox.value())
         # print text_info
         label_color = playBlastCMD.convert_color(playBlastCMD.get_rgb(self.label_color_pushButton.styleSheet()))
         value_color = playBlastCMD.convert_color(playBlastCMD.get_rgb(self.value_color_pushButton.styleSheet()))
@@ -234,18 +235,19 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         #                                board_opacity=board_opacity)
 
     def draw_hud_text(self, hud_text):
-        return playBlastCMD.draw_all_text_cmd(input_pic=hud_text["input_pic"],
-                                               output_pic=hud_text["output_pic"],
-                                               text_content=hud_text["text_content"],
-                                               label_color=hud_text["label_color"],
-                                               value_color=hud_text["value_color"],
-                                               font=hud_text["font"],
-                                               font_size=hud_text["font_size"],
-                                               unit_opacity=hud_text["unit_opacity"],
-                                               board_display=hud_text["board_display"],
-                                               board_color=hud_text["board_color"],
-                                               board_opacity=hud_text["board_opacity"]
-                                               )
+        return playBlastCMD.draw_all_text_cmd(**hud_text)
+        # return playBlastCMD.draw_all_text_cmd(input_pic=hud_text["input_pic"],
+        #                                        output_pic=hud_text["output_pic"],
+        #                                        text_content=hud_text["text_content"],
+        #                                        label_color=hud_text["label_color"],
+        #                                        value_color=hud_text["value_color"],
+        #                                        font=hud_text["font"],
+        #                                        font_size=hud_text["font_size"],
+        #                                        unit_opacity=hud_text["unit_opacity"],
+        #                                        board_display=hud_text["board_display"],
+        #                                        board_color=hud_text["board_color"],
+        #                                        board_opacity=hud_text["board_opacity"]
+        #                                        )
 
     """
     PlayBlast settings

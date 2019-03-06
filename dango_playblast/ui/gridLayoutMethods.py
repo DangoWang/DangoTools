@@ -71,7 +71,7 @@ def all_units(grid_layout):
 	return all_units
 
 
-def get_pos_with_margin(pos_tuple, pos_tuple2, w1, w2, h1, h2, margin):
+def get_pos_with_margin(pos_tuple, pos_tuple2, w1, w2, h1, h2, margin, gap):
 	"""
 	:param pos_tuple: (block, section)
 	:param pos_tuple2: (433, 255)
@@ -92,11 +92,17 @@ def get_pos_with_margin(pos_tuple, pos_tuple2, w1, w2, h1, h2, margin):
 		tuple_temp1 = pos_tuple2[1] - (h1 * margin)
 	elif pos_tuple[0] > 5:
 		tuple_temp1 = pos_tuple2[1] + (h2 * margin*1.5)
+	if pos_tuple[1] % 2 == 0:
+		if pos_tuple[1] < 7:
+			tuple_temp0 = tuple_temp0 - w1 * gap
+	else:
+		if pos_tuple[1] > 6:
+			tuple_temp0 = tuple_temp0 + w1 * gap
 	final_pos = (tuple_temp0, tuple_temp1)
 	return final_pos
 
 
-def all_units_with_margin(grid_layout, margin):
+def all_units_with_margin(grid_layout, margin, gap):
 	h1 = grid_layout.itemAtPosition(0, 1).widget().geometry().getRect()[3]
 	h2 = grid_layout.itemAtPosition(11, 1).widget().geometry().getRect()[3]
 	w1 = grid_layout.itemAtPosition(1, 0).widget().geometry().getRect()[2]
@@ -115,7 +121,7 @@ def all_units_with_margin(grid_layout, margin):
 			widget = grid_layout.itemAtPosition(each_pos[0], each_pos[1]).widget()
 			geometry = widget.geometry().getRect()
 			# print size
-			final_pos = get_pos_with_margin(each_pos, (geometry[0], geometry[1]), w1, w2, h1, h2, margin)
+			final_pos = get_pos_with_margin(each_pos, (geometry[0], geometry[1]), w1, w2, h1, h2, margin, gap)
 			percent_x = final_pos[0] / size[0]
 			percent_y = final_pos[1] / size[1]
 			all_units.extend([(widget, each_pos, (percent_x, percent_y))])

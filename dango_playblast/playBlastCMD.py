@@ -77,7 +77,7 @@ def draw_all_text_cmd(input_pic, output_pic, text_content=None, label_color=None
     return draw_text
 
 
-def get_text_info(grid_layout, size, scale, camera_name, margin=0):
+def get_text_info(grid_layout, size, scale, camera_name, margin=0, gap=1):
     """
     :param margin: 0 by default
     :param scale: like 0.5
@@ -87,7 +87,7 @@ def get_text_info(grid_layout, size, scale, camera_name, margin=0):
     :return: all text info
     """
     text_info = list()  # every unit text info form like this: [(text, color_mode, pos())...]
-    all_units = gridLayoutMethods.all_units_with_margin(grid_layout, margin)
+    all_units = gridLayoutMethods.all_units_with_margin(grid_layout, margin, gap)
     # print all_units
     for each in all_units:
         text = get_unit_text(grid_layout, each[1], camera_name)
