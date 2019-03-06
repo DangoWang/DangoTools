@@ -38,6 +38,7 @@ default_config = os.path.join(file_path, 'config\\oct_play_blast_settings.yaml')
 default_hud_config = os.path.join(file_path, 'config\\HUD_config.yaml')
 user_config = "C:/Users/" + getpass.getuser() + "/Documents/oct_play_blast_settings.yaml"
 user_hud_config = "C:/Users/" + getpass.getuser() + "/Documents/HUD_config.yaml"
+ffmpeg_path = "C:/Users/" + getpass.getuser() + "/Documents/maya/ffmpeg.exe"
 proj_dic = {'dsf': 0}  # record the item index of the window for changing
 dep_dic = {'Layout': 0, 'Animation': 1, 'VFX': 2, 'Lighting': 3}
 form_class, base_class = loadUiType.loadUiType(file_path + '\\ui\\oct_playBlast_ui.ui')
@@ -113,6 +114,8 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         frame = start_frame
         playbackSlider = mel.eval("$temp = $gPlayBackSlider")
         sound_path = "no_sound"
+        if not os.path.isfile(ffmpeg_path):
+            shutil.copyfile(file_path + "/bin/ffmpeg.exe", ffmpeg_path)
         try:
             soundStr = pm.PyNode(pm.timeControl(playbackSlider, q=1, sound=1, fpn=1))
             sound_path = soundStr.getAttr("filename")
@@ -156,12 +159,11 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         if self.draw_hud_checkBox.isChecked():
             pic_format = '.jpg'
         self.compress_video(fps=str(fps), time_duation=str(time_duation), start_number=start_number,
-                            ffmpeg_path="\"" + file_path + "/bin/ffmpeg.exe" + "\"",
+                            ffmpeg_path="\"" + ffmpeg_path + "\"",
                             input_path="\"" + jpg_path + "/%s" % (mov_name + ".%04d"+pic_format) + "\"",
                             output_path="\"" + mov_path + "/%s" % (mov_name + ".mov") + "\"",
                             sound="\"" + sound_path + "\"", jpg_path=jpg_path)
 
-        
     def compress_video(self, fps, time_duation, start_number, ffmpeg_path, input_path, output_path, jpg_path, sound=None):
         if sound == "\"no_sound\"":
             compress_word = [ffmpeg_path, " -y -framerate ", fps, u" -start_number ", start_number, " -i ", input_path,

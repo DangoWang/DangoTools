@@ -5,8 +5,10 @@
 
 import maya.cmds as cmds
 import os
+import shutil
 import logging
 import locale
+import getpass
 import subprocess
 from utils import listMayaInfo, maya_multi_processing
 from ui import gridLayoutMethods
@@ -15,6 +17,7 @@ import time
 __license__ = "MIT"
 __author__ = "dango wang"
 file_path = str(os.path.split(os.path.realpath(__file__))[0])
+ffmpeg_path = "C:/Users/" + getpass.getuser() + "/Documents/maya/ffmpeg.exe"
 
 
 def capture(panel=None, width=None, height=None, percent=50, filename=None, frame=None,
@@ -38,7 +41,9 @@ def draw_text(drawed_text, file_name=None, output_name=None):
     #     '\"fontfile={}.ttf: text=\"{}\": x={}: y={}: fontsize={}: fontcolor={}@{}: box={}: boxcolor={}@{}\"'\
     #         .format(font, text, pos[0], pos[1], font_size, label_color, unit_opacity, board_display,
     #                 board_color, board_opacity)
-    ffmpeg_path = file_path + "/bin/ffmpeg.exe"
+    # ffmpeg_path = file_path + "/bin/ffmpeg.exe"
+    if not os.path.isfile(ffmpeg_path):
+        shutil.copyfile(file_path + "/bin/ffmpeg.exe", ffmpeg_path)
     input_file = file_name
     output_file = output_name
     cmd = [ffmpeg_path, "-y", "-i", "%s" % input_file, "-vf", "%s" % drawed_text, "%s" % output_file]
