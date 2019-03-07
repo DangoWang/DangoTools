@@ -6,18 +6,18 @@
 import maya.cmds as cmds
 import os
 import shutil
-import logging
-import locale
+# import logging
+# import locale
 import getpass
 import subprocess
 from utils import listMayaInfo, maya_multi_processing
 from ui import gridLayoutMethods
-import time
+# import time
 
 __license__ = "MIT"
 __author__ = "dango wang"
 file_path = str(os.path.split(os.path.realpath(__file__))[0])
-ffmpeg_path = "C:/Users/" + getpass.getuser() + "/Documents/maya/ffmpeg.exe"
+ffmpeg_path = cmds.internalVar(userAppDir=True) + "ffmpeg.exe"
 
 
 def capture(panel=None, width=None, height=None, percent=50, filename=None, frame=None,

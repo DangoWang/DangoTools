@@ -10,7 +10,7 @@ __doc__ = 'this script inherits oct_playblast_win and is to add functions to the
 import os
 import subprocess
 import codecs
-import getpass
+# import getpass
 import shutil
 import logging
 import time
@@ -36,9 +36,9 @@ reload(playBlastCMD)
 file_path = str(os.path.split(os.path.realpath(__file__))[0])
 default_config = os.path.join(file_path, 'config\\oct_play_blast_settings.yaml')
 default_hud_config = os.path.join(file_path, 'config\\HUD_config.yaml')
-user_config = "C:/Users/" + getpass.getuser() + "/Documents/oct_play_blast_settings.yaml"
-user_hud_config = "C:/Users/" + getpass.getuser() + "/Documents/HUD_config.yaml"
-ffmpeg_path = "C:/Users/" + getpass.getuser() + "/Documents/maya/ffmpeg.exe"
+user_config = cmds.internalVar(userAppDir=True) + "oct_play_blast_settings.yaml"
+user_hud_config = cmds.internalVar(userAppDir=True) + "HUD_config.yaml"
+ffmpeg_path = cmds.internalVar(userAppDir=True) + "ffmpeg.exe"
 proj_dic = {'dsf': 0}  # record the item index of the window for changing
 dep_dic = {'Layout': 0, 'Animation': 1, 'VFX': 2, 'Lighting': 3}
 form_class, base_class = loadUiType.loadUiType(file_path + '\\ui\\oct_playBlast_ui.ui')
