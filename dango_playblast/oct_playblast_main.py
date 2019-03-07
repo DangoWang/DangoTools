@@ -115,6 +115,11 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         playbackSlider = mel.eval("$temp = $gPlayBackSlider")
         sound_path = "no_sound"
         if not os.path.isfile(ffmpeg_path):
+            if not os.path.isdir(ffmpeg_path.strip('/ffmpeg.exe')):
+                try:
+                    os.mkdir(ffmpeg_path.strip('/ffmpeg.exe'))
+                except:
+                    logging.error(u"请确保我的文档中有maya文件夹！")
             shutil.copyfile(file_path + "/bin/ffmpeg.exe", ffmpeg_path)
         try:
             soundStr = pm.PyNode(pm.timeControl(playbackSlider, q=1, sound=1, fpn=1))

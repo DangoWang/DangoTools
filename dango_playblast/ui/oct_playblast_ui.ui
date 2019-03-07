@@ -58,7 +58,7 @@
       <item>
        <widget class="QCheckBox" name="save_checkBox">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="maximumSize">
          <size>
@@ -73,7 +73,7 @@
          <bool>true</bool>
         </property>
         <property name="checked">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -769,7 +769,7 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>2048</number>
+             <number>9999</number>
             </property>
             <property name="value">
              <number>2048</number>
@@ -807,7 +807,7 @@
              <number>1</number>
             </property>
             <property name="maximum">
-             <number>858</number>
+             <number>9999</number>
             </property>
             <property name="value">
              <number>858</number>
@@ -1293,7 +1293,7 @@
           <height>22</height>
          </rect>
         </property>
-        <property name="currentText">
+        <property name="currentText" stdset="0">
          <string>1</string>
         </property>
         <item>
