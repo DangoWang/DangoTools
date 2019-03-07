@@ -26,6 +26,7 @@ class OctPlayBlastWin(base_class, form_class):
     def __init__(self, parent=None):
         super(OctPlayBlastWin, self).__init__(parent=loadUiType.getMayaWindow())
         self.setupUi(self)
+        self._playblast_panel = None
         # self.hud_layout = HUDLayout()
         # self.hud_gridLayout.addLayout(self.hud_layout, 0, 0)
 
@@ -34,17 +35,16 @@ class OctPlayBlastWin(base_class, form_class):
         :param camera_name: input camera attached to the panel
         :return: model_editor_widget for adding hud info
         """
-        layout_temp = "layout_temp"
-        if not cmds.control("layout_temp", q=1, ex=1):
-            layout_temp = cmds.paneLayout("layout_temp")
-        if not cmds.modelPanel("playBlast_panel", q=1, ex=1):
-            cmds.modelPanel("playBlast_panel",parent=layout_temp)
-        camera_panel = omui.MQtUtil.findControl(layout_temp)
+        cam_panel_win = cmds.window()
+        layout_temp = cmds.paneLayout(parent=cam_panel_win)
+        cam_panel = cmds.modelPanel(parent=layout_temp)
+        self._playblast_panel = cam_panel
+        camera_panel = omui.MQtUtil.findControl(cam_panel_win)
         # print camera_panel
         camera_widget = wrapInstance(long(camera_panel), QWidget)
         # print camera_widget
         self.playblast_gridLayout.addWidget(camera_widget)
-        cmds.modelEditor("playBlast_panel", e=True, allObjects=False, polymeshes=True,
+        cmds.modelEditor(cam_panel, e=True, allObjects=False, polymeshes=True,
                          hud=False, displayAppearance="smoothShaded", displayTextures=False, camera=camera_name)
         return True
         # self.verticalLayout.addWidget(camera_widget)
