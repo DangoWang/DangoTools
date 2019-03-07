@@ -103,7 +103,7 @@ def get_maya_win(module="mayaUI"):
 
 
 def get_timeslider_time():
-    return [int(pm.playbackOptions(ast=True, query=True)),int(pm.playbackOptions(min=True, query=True)),\
+    return [int(pm.playbackOptions(ast=True, query=True)), int(pm.playbackOptions(min=True, query=True)),\
     int(pm.playbackOptions(max=True, query=True)),int(pm.playbackOptions(aet=True, query=True))]
 
 

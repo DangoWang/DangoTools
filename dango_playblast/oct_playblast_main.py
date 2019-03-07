@@ -632,7 +632,7 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
     def add_hud_unit(self):
         section = int(self.add_section_comboBox.currentText())
         block = int(self.add_block_comboBox.currentText())
-        label = self.hud_label_add_lineEdit.text() or "Unknown"
+        label = self.hud_label_add_lineEdit.text() or " "
         value = self.hud_value_add_lineEdit.text() or " "
         self.add_hud_label(label, [block, 2 * section - 1])
         self.add_hud_label(value, [block, 2 * section])
