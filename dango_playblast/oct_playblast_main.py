@@ -142,7 +142,7 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
             shutil.rmtree(jpg_path)
         while frame < (end_frame + 1):
             cmds.currentTime(frame)
-            picture = playBlastCMD.capture(panel='playBlast_panel', width=width, height=height, percent=percent,
+            picture = playBlastCMD.capture(panel=self._playblast_panel, width=width, height=height, percent=percent,
                                            filename=jpg_path + "/" + mov_name, frame=frame,
                                            quality=quality, off_screen=off_screen, framePadding=4)
             # print picture
@@ -182,9 +182,9 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         # print compress_cmd
         subprocess.call(compress_cmd, shell=True)
         subprocess.Popen("explorer \"%s\"" % os.path.abspath(output_path.strip("\"")))
-        if os.path.isdir(jpg_path):
-            timer = maya_multi_processing.Timer(5, lambda: shutil.rmtree(jpg_path), repeat=False)
-            timer.start()
+        # if os.path.isdir(jpg_path):
+        #     timer = maya_multi_processing.Timer(5, lambda: shutil.rmtree(jpg_path), repeat=False)
+        #     timer.start()
 
     # print output_path.strip("\"")
 

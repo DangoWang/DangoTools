@@ -48,7 +48,7 @@ def draw_text(drawed_text, file_name=None, output_name=None):
     output_file = output_name
     cmd = [ffmpeg_path, "-y", "-i", "%s" % input_file, "-vf", "%s" % drawed_text, "%s" % output_file]
     command = " ".join(cmd)
-    # print command
+    print command
     subprocess.Popen(command, shell=True)
     return True
 
@@ -135,11 +135,10 @@ def get_unit_text(grid_layout, pos, camera_name):
 
 def convert_color(rgb):
     def convert_0(hex_color):
-        if hex_color == "0":
-            return "00"
+        if len(hex_color) == 1:
+            return "0" + hex_color
         else:
             return hex_color
-    # print R,G,B
     return convert_0(hex(rgb[0]).split("0x")[1]) + convert_0(hex(rgb[1]).split("0x")[1]) + convert_0(hex(rgb[2]).split("0x")[1])
 
 

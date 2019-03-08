@@ -3,6 +3,8 @@
 .pyc
 .exe
 .txt
+.idocx
+.rar
 dango_playblast/__init__.py
 dango_playblast/ui/__init__.py
 dango_playblast/utils/__init__.py
