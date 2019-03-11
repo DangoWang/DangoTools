@@ -82,6 +82,7 @@ def get_pos_with_margin(pos_tuple, pos_tuple2, w1, w2, h1, h2, margin, gap):
 	:param margin:
 	:return:
 	"""
+	import math
 	tuple_temp0 = pos_tuple2[0]
 	tuple_temp1 = pos_tuple2[1]
 	if pos_tuple[1] < 5:
@@ -89,9 +90,11 @@ def get_pos_with_margin(pos_tuple, pos_tuple2, w1, w2, h1, h2, margin, gap):
 	elif pos_tuple[1] > 6:
 		tuple_temp0 = pos_tuple2[0] + (w2 * margin*1.5)
 	if pos_tuple[0] < 5:
-		tuple_temp1 = pos_tuple2[1] - (h1 * margin)
+		h_temp = math.pow(pos_tuple[0], 1/(margin*2-0.2))
+		tuple_temp1 = pos_tuple2[1] - (h1 * margin * h_temp)
 	elif pos_tuple[0] > 5:
-		tuple_temp1 = pos_tuple2[1] + (h2 * margin*1.5)
+		h_temp1 = math.pow(11-pos_tuple[0], 1/(margin*2-0.2))
+		tuple_temp1 = pos_tuple2[1] + (h2 * margin * h_temp1) + h2*0.7
 	if pos_tuple[1] % 2 == 0:
 		if pos_tuple[1] < 7:
 			tuple_temp0 = tuple_temp0 - w1 * gap

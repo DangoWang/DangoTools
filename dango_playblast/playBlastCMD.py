@@ -48,7 +48,7 @@ def draw_text(drawed_text, file_name=None, output_name=None):
     output_file = output_name
     cmd = [ffmpeg_path, "-y", "-i", "%s" % input_file, "-vf", "%s" % drawed_text, "%s" % output_file]
     command = " ".join(cmd)
-    print command
+    # print command
     subprocess.Popen(command, shell=True)
     return True
 
