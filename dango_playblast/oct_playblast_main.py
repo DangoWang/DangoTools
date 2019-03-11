@@ -182,9 +182,9 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         # print compress_cmd
         subprocess.call(compress_cmd, shell=True)
         subprocess.Popen("explorer \"%s\"" % os.path.abspath(output_path.strip("\"")))
-        # if os.path.isdir(jpg_path):
-        #     timer = maya_multi_processing.Timer(5, lambda: shutil.rmtree(jpg_path), repeat=False)
-        #     timer.start()
+        if os.path.isdir(jpg_path):
+            timer = maya_multi_processing.Timer(5, lambda: shutil.rmtree(jpg_path), repeat=False)
+            timer.start()
 
     # print output_path.strip("\"")
 
