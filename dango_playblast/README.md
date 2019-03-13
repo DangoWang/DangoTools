@@ -14,4 +14,4 @@ oct_playblast_main.main()
 
 
 
-请自行将上面的路径（D:\dango_repo\maya_playblast）换成自己的  
+请自行将上面的路径（D:\\）换成自己的  
