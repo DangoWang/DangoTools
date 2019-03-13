@@ -177,7 +177,7 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         else:
             compress_word = [ffmpeg_path, "-y -framerate", fps, u"-start_number", start_number, "-i", input_path,
                              "-i", sound, "-ss 0:0:0", "-t", time_duation,
-                             "-vcodec h264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p", output_path]
+                             "-c:v libx264 -profile:v baseline -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p", output_path]
         compress_cmd = " ".join(compress_word)
         # print compress_cmd
         subprocess.call(compress_cmd, shell=True)
