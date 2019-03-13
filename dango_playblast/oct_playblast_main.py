@@ -171,14 +171,14 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
 
     def compress_video(self, fps, time_duation, start_number, ffmpeg_path, input_path, output_path, jpg_path, sound=None):
         if sound == "\"no_sound\"":
-            compress_word = [ffmpeg_path, " -y -framerate ", fps, u" -start_number ", start_number, " -i ", input_path,
-                             " -vcodec h264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p ", output_path]
+            compress_word = [ffmpeg_path, "-y -framerate", fps, u"-start_number", start_number, "-i", input_path,
+                             "-c:v libx264 -profile:v baseline -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p", output_path]
         # print compress_word
         else:
-            compress_word = [ffmpeg_path, " -y -framerate ", fps, u" -start_number ", start_number, " -i ", input_path,
-                             " -i ", sound, " -ss 0:0:0 ", " -t ", time_duation,
-                             " -vcodec h264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p ", output_path]
-        compress_cmd = "".join(compress_word)
+            compress_word = [ffmpeg_path, "-y -framerate", fps, u"-start_number", start_number, "-i", input_path,
+                             "-i", sound, "-ss 0:0:0", "-t", time_duation,
+                             "-vcodec h264 -vf \"pad=ceil(iw/2)*2:ceil(ih/2)*2\" -pix_fmt yuv420p", output_path]
+        compress_cmd = " ".join(compress_word)
         # print compress_cmd
         subprocess.call(compress_cmd, shell=True)
         subprocess.Popen("explorer \"%s\"" % os.path.abspath(output_path.strip("\"")))
@@ -392,7 +392,6 @@ class OctPlayBlastMain(oct_playblast_win.OctPlayBlastWin):
         self.read_hud_config(default_hud_config)
         self.set_hud_settings()
         return True
-
 
     def on_add_hud_pushButton_clicked(self):
         """
