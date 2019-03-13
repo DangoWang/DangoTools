@@ -13,6 +13,12 @@
     <height>548</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>1348</width>
+    <height>548</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>OCT PlayBlast Tool  v1.0  by  wangdonghao</string>
   </property>
@@ -191,6 +197,12 @@
       </property>
       <item>
        <widget class="QStackedWidget" name="playblast_stackedWidget">
+        <property name="maximumSize">
+         <size>
+          <width>792</width>
+          <height>455</height>
+         </size>
+        </property>
         <property name="font">
          <font>
           <italic>false</italic>
@@ -201,7 +213,7 @@
          <string notr="true"/>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="playblast_page">
          <layout class="QGridLayout" name="playblast_gridLayout"/>
@@ -531,7 +543,7 @@
        </size>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="playblast_tab">
        <attribute name="title">
