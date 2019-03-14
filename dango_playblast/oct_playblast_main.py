@@ -39,7 +39,7 @@ default_hud_config = os.path.join(file_path, 'config\\HUD_config.yaml')
 user_config = cmds.internalVar(userAppDir=True) + "oct_play_blast_settings.yaml"
 user_hud_config = cmds.internalVar(userAppDir=True) + "HUD_config.yaml"
 ffmpeg_path = cmds.internalVar(userAppDir=True) + "ffmpeg.exe"
-proj_dic = {'dsf': 0}  # record the item index of the window for changing
+proj_dic = {'proj': 0}  # record the item index of the window for changing
 dep_dic = {'Layout': 0, 'Animation': 1, 'VFX': 2, 'Lighting': 3}
 form_class, base_class = loadUiType.loadUiType(file_path + '\\ui\\oct_playBlast_ui.ui')
 

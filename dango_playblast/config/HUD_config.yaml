@@ -1,5 +1,5 @@
 # written by dango wang
-DefaultProj: "dsf"
+DefaultProj: "proj"
 DefaultDep: "Layout"
 dsf:
     Layout:

@@ -1,6 +1,6 @@
 DefaultDep: !!python/unicode 'Layout'
-DefaultProj: !!python/unicode 'dsf'
-dsf:
+DefaultProj: !!python/unicode 'proj'
+proj:
   Animation:
   - {ControlName: gap_doubleSpinBox, ReadMethod: value, SetMethod: setValue, Value: 1}
   - {ControlName: size_X_spinBox, ReadMethod: value, SetMethod: setValue, Value: 2048}
