@@ -6,7 +6,6 @@ from pymel.core import PyNode
 
 __author__ = "dango wang"
 __license__ = "MIT"
-__doc__ = 'this script is to generate nightmare\'s motion path with the given curve'
 import os
 import sys
 import logging
@@ -220,18 +219,11 @@ class MakeCrvControls(MoPathCrv):
                     x = float(j)/span_points_num
                     t = abs(x - 0.5)
                     y1 = float(-2*t+1)
-                    y2 = float((2*t-1)**max_weight)
+                    y2 = float((-2*t+1)**max_weight)
                     if x <= 0.5:
                         draw_weight = 1-((y1-y2)/(weight+1) + y2)/2
                     elif x > 0.5:
                         draw_weight = ((y1 - y2) / (weight + 1) + y2) / 2
-                    # if draw_mode == "x":
-                    #     draw_weight = 1 - (j / span_points_num)
-                    # elif draw_mode == "xx":
-                    #     draw_weight = 1 - ((j * j) / (span_points_num * span_points_num))
-                    # elif draw_mode == 'cosx':
-                    #     j = i * math.pi / (2*span_points_num)  # j ∈ [0, π/2]
-                    #     draw_weight = (math.cos(2*j)+1) / 2
                     transform_value = [(jnt_name, draw_weight)]
                     # print each, transform_value
                     mc.skinPercent(self._skin_cluster, each, transformValue=transform_value)
@@ -275,66 +267,7 @@ class Main(base_class, form_class):
     def __init__(self, parent=None):
         super(Main, self).__init__(parent=loadUiType.getMayaWindow())
         self.setupUi(self)
-        # self._ctrl_name = str()
-        # self._locator_ctl = str()
-        # self._first_jnt_name = str()
-        # self._last_jnt_name = str()
         self._crv_name = str()
-        # self._crv_points_num = str()
-        # self._crv_roll_name = str()
-        # self.ctrLweight_sl.sliderReleased.connect(self.on_create_crv_ctrl_pb_clicked)
-        # self.controls_num_sb.editingFinished .connect(self.on_create_crv_ctrl_pb_clicked)
-
-    # @QtCore.Slot(name="on_input_ctrl_attr_pb_clicked")
-    # def on_input_ctrl_attr_pb_clicked(self):
-    #     selected_attr = mc.channelBox("mainChannelBox", q=1, selectedMainAttributes=1)[0]
-    #     selected_crv = self.get_selected()
-    #     selected_crv_attr = selected_crv + "." + selected_attr
-    #     self.input_ctrl_attr_le.setText(selected_crv_attr)
-    #     self._ctrl_name = selected_crv_attr
-    #     return selected_crv_attr
-
-    # @QtCore.Slot(name="on_input_ctrl_roll_pb_clicked")
-    # def on_input_ctrl_roll_pb_clicked(self):
-    #     selected_attr = mc.channelBox("mainChannelBox", q=1, selectedMainAttributes=1)[0]
-    #     selected_crv = self.get_selected()
-    #     selected_crv_attr = selected_crv + "." + selected_attr
-    #     self.input_ctrl_roll_le.setText(selected_crv_attr)
-    #     self._crv_roll_name = selected_crv_attr
-    #     return selected_crv_attr
-    # @QtCore.Slot(name="on_locator_control_pb_clicked")
-    # def on_locator_control_pb_clicked(self):
-    #     selected_crv = self.get_selected()
-    #     self.locator_control_le.setText(selected_crv)
-    #     self._locator_ctl = selected_crv
-    #     return selected_crv
-
-    # @QtCore.Slot(name="on_input_first_jnt_name_pb_clicked")
-    # def on_input_first_jnt_name_pb_clicked(self):
-    #     selected_jnt = self.get_selected()
-    #     if not mc.nodeType(selected_jnt) == 'joint':
-    #         print selected_jnt
-    #         logging.error(u'请选择骨骼！')
-    #         return
-    #     self.input_first_jnt_name_le.setText(selected_jnt)
-    #     self._first_jnt_name = selected_jnt
-    #     return selected_jnt
-
-    # @staticmethod
-    # def get_end_jnt_name(jnt):
-    #     return mc.listRelatives(jnt, c=1, ad=1)[0]
-
-    # @QtCore.Slot(name="on_input_last_jnt_name_pb_clicked")
-    # def on_input_last_jnt_name_pb_clicked(self):
-    #     selected_jnt = self.get_selected()
-    #     if not mc.nodeType(selected_jnt) == 'joint':
-    #         logging.error(u'请选择骨骼！')
-    #         return
-    #     self.input_last_jnt_name_le.setText(selected_jnt)
-    #     self._last_jnt_name = selected_jnt
-    #     self.input_first_jnt_name_le.setText(self.get_end_jnt_name(selected_jnt))
-    #     self._first_jnt_name = self.get_end_jnt_name(selected_jnt)
-    #     return selected_jnt
 
     @QtCore.Slot(name="on_input_crv_name_pb_clicked")
     def on_input_crv_name_pb_clicked(self):
@@ -346,12 +279,6 @@ class Main(base_class, form_class):
         self._crv_name = selected_crv
         return selected_crv
 
-    # @QtCore.Slot(name='on_doit_pb_clicked')
-    # @undoable
-    # def on_doit_pb_clicked(self):
-    #     self.rebuild_crv()
-    #     self.create_ik_handle()
-
     @staticmethod
     def get_selected():
         selection = mc.ls(sl=True)
@@ -359,12 +286,6 @@ class Main(base_class, form_class):
             logging.error(u"请只选择一个物体！")
             return
         return selection[0]
-
-    # @QtCore.Slot(name="on_reverse_crv_pb_clicked")
-    # def on_reverse_crv_pb_clicked(self):
-    #     if self._crv_name:
-    #         mc.reverseCurve(self._crv_name, ch=1, rpo=1)
-    #     return
 
     @property
     def weight(self):
@@ -379,34 +300,6 @@ class Main(base_class, form_class):
         if if_rebuild:
             spans = self.crv_points_num_sb.value()
             mc.rebuildCurve(self._crv_name, rpo=1, ch=1, end=1, kr=0, kcp=0, kt=0, d=3, tol=0.01, rt=0, s=spans)
-
-    # def create_ik_handle(self):
-    #     #  create locator
-    #     control_name = self._ctrl_name.split(".")[0]
-    #     locator_name = self._crv_name + "_motionPath_locator"
-    #     locator_pos = [mc.getAttr(control_name+".tx"),
-    #                    mc.getAttr(control_name+".ty") + 999999,
-    #                    mc.getAttr(control_name+".tz")]
-    #     motion_path_locator = mc.spaceLocator(name=locator_name)[0]
-    #     mc.select(locator_name, r=True)
-    #     if self.cp_cb.isChecked():
-    #         mc.CenterPivot()
-    #     mc.setAttr(pm.PyNode(locator_name).getShape().name()+".localScale", 10, 10, 10)
-    #     mel.eval("channelBoxCommand -freezeScale")
-    #     locator_grp = mc.createNode("transform", name=locator_name+"_Grp")
-    #     mc.parent(locator_name, locator_grp)
-    #     #  create IK handle
-    #     mc.select(self._first_jnt_name, self._last_jnt_name, self._crv_name, r=True)
-    #     ik_handle = mc.ikHandle(sol="ikSplineSolver", ccv=False, pcv=False)
-    #     mc.setAttr(ik_handle[0]+".dTwistControlEnable", 1)
-    #     mc.setAttr(ik_handle[0]+".dWorldUpType", 1)
-    #     # print ik_handle[0], motion_path_locator
-    #     mc.setAttr(motion_path_locator+".t", locator_pos[0], locator_pos[1], locator_pos[2])
-    #     mc.connectAttr(motion_path_locator+".worldMatrix[0]", ik_handle[0]+".dWorldUpMatrix")
-    #     mc.connectAttr(self._ctrl_name, ik_handle[0] + ".offset", f=True)
-    #     mc.connectAttr(self._crv_roll_name, ik_handle[0] + ".roll", f=True)
-    #     # mc.parentConstraint(self._locator_ctl, locator_grp, mo=1)
-    #     mc.group(ik_handle[0], locator_grp, name=self._crv_name+'_rig_grp')
 
     @QtCore.Slot(name='on_create_crv_ctrl_pb_clicked')
     @undoable
